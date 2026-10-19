@@ -1,0 +1,20 @@
+# Install these SYSTEM-WIDE from an ELEVATED prompt, and include
+# --ignore-installed, or the Windows service will not be able to import them:
+#
+#     "C:\Program Files\Python314\python.exe" -m pip install --ignore-installed -r requirements.txt
+#
+# A service runs as LocalSystem, which has no user profile and therefore cannot
+# see per-user site-packages. Without --ignore-installed, pip treats packages
+# already present in your user profile as satisfied and leaves the transitive
+# dependencies (urllib3, certifi, idna, charset_normalizer) behind there, and
+# the service fails one import deeper than before. See INSTALL.md section 2.
+
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Only needed to run WebWatcher as a Windows service; the check/run commands
+# work without it. After installing, run the post-install step, elevated:
+#
+#     "C:\Program Files\Python314\python.exe" "C:\Program Files\Python314\Scripts\pywin32_postinstall.py" -install
+pywin32>=306; sys_platform == "win32"
